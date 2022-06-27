@@ -6,7 +6,7 @@
   "types": "./dist/shellmin.d.ts",
   "scripts": {
     "build": "del .\\dist /S /Q && tsc --build && cd src && copyfiles -e=\"./**/*.ts\" \"./**/*\" \"../dist/src/\" && cd ../",
-    "test": "node test/test"
+    "test": "node dist/test/test"
   },
   "keywords": [],
   "author": "onedevman",
