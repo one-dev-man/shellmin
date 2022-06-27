@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "main": "./dist/shellmin.js",
+  "types": "./dist/shellmin.d.ts",
   "scripts": {
     "build": "tsc --build",
     "test": "node test/test"
