@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _array_dictionary, _dictionary, _label, _help, _callback, _env_env, _argv_env, _commands, _startup_message, _prefix, _suffix, _history, _h_i, _tmp_line, _cursor, _old_line_size, _line, _closed, _print_compiled_prompt, _live_stdin_data_callback;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CLI = exports.Command = exports.Environment = void 0;
+exports.Shellmin = exports.Command = exports.Environment = void 0;
 const readline = __importStar(require("readline"));
 const nodtilus_1 = __importDefault(require("nodtilus"));
 const events_1 = require("events");
@@ -47,7 +47,7 @@ const DEFAULT_COMMANDS = {
     exit: {
         label: "exit",
         help: "exit - Exit the program.",
-        callback: async (label, args, cli) => {
+        callback: async (label, args, shellmin) => {
             process.exit(0);
             // return true;
         }
@@ -55,10 +55,10 @@ const DEFAULT_COMMANDS = {
     help: {
         label: "help",
         help: "[<command>] - Show commands usage or specific command usage.",
-        callback: async (label, args, cli) => {
+        callback: async (label, args, shellmin) => {
             let clog_f = console["__log"] || console.log;
             if (args.length < 1) {
-                let cmds = cli.getCommands();
+                let cmds = shellmin.getCommands();
                 clog_f("Commands usage :");
                 for (let i = 0; i < cmds.length; ++i) {
                     let cmd = cmds[i];
@@ -66,8 +66,8 @@ const DEFAULT_COMMANDS = {
                 }
             }
             else {
-                if (cli.hasCommand(args[0])) {
-                    let cmd = cli.getCommand(args[0]);
+                if (shellmin.hasCommand(args[0])) {
+                    let cmd = shellmin.getCommand(args[0]);
                     clog_f("Command usage :");
                     clog_f(" - " + cmd.label + " : " + cmd.help);
                 }
@@ -218,7 +218,7 @@ class Command {
         _label.set(this, void 0);
         _help.set(this, void 0);
         _callback.set(this, void 0);
-        this.cli = null;
+        this.shellmin = null;
         __classPrivateFieldSet(this, _label, options.label);
         __classPrivateFieldSet(this, _help, options.help || "");
         __classPrivateFieldSet(this, _callback, options.callback);
@@ -242,7 +242,7 @@ class Command {
 exports.Command = Command;
 _label = new WeakMap(), _help = new WeakMap(), _callback = new WeakMap();
 //
-class CLI extends events_1.EventEmitter {
+class Shellmin extends events_1.EventEmitter {
     constructor(options) {
         super();
         _env_env.set(this, void 0);
@@ -441,7 +441,7 @@ class CLI extends events_1.EventEmitter {
     registerCommand(command) {
         let _command = command instanceof Command ? command : new Command(command);
         this.unregisterCommand(_command.label);
-        _command.cli = this;
+        _command.shellmin = this;
         __classPrivateFieldGet(this, _commands).push(_command);
         return this;
     }
@@ -512,7 +512,7 @@ class CLI extends events_1.EventEmitter {
         return this;
     }
 }
-exports.CLI = CLI;
+exports.Shellmin = Shellmin;
 _env_env = new WeakMap(), _argv_env = new WeakMap(), _commands = new WeakMap(), _startup_message = new WeakMap(), _prefix = new WeakMap(), _suffix = new WeakMap(), _history = new WeakMap(), _h_i = new WeakMap(), _tmp_line = new WeakMap(), _cursor = new WeakMap(), _old_line_size = new WeakMap(), _line = new WeakMap(), _closed = new WeakMap(), _print_compiled_prompt = new WeakMap(), _live_stdin_data_callback = new WeakMap();
 function createLogPrefix(name) {
     let d = new Date();

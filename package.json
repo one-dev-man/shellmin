@@ -5,7 +5,7 @@
   "main": "./dist/shellmin.js",
   "types": "./dist/shellmin.d.ts",
   "scripts": {
-    "build": "tsc --build",
+    "build": "del .\\dist /S /Q && tsc --build && cd src && copyfiles -e=\"./**/*.ts\" \"./**/*\" \"../dist/src/\" && cd ../",
     "test": "node test/test"
   },
   "keywords": [],

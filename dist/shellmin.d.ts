@@ -18,11 +18,11 @@ export declare class Environment {
     get firstCommandLabel(): import("nodtilus/dist/utils/jsontypechecker").TYPES;
     parse(content: string): string;
 }
-export declare type CLI_COMMAND_CALLBACK_TYPE = (label: string, args: Array<any>, cli: CLI | any) => Promise<any>;
-export declare type CLI_COMMAND_CONSTRUCTOR_TYPE = {
+export declare type SHELLMINCOMMAND_CALLBACK_TYPE = (label: string, args: Array<any>, shellmin: Shellmin | any) => Promise<any>;
+export declare type SHELLMINCOMMAND_CONSTRUCTOR_TYPE = {
     label: string;
     help?: string;
-    callback: CLI_COMMAND_CALLBACK_TYPE;
+    callback: SHELLMINCOMMAND_CALLBACK_TYPE;
 };
 export declare class Command {
     #private;
@@ -30,13 +30,13 @@ export declare class Command {
         label: string | null;
         args: Array<any>;
     };
-    cli: CLI | null;
-    constructor(options: CLI_COMMAND_CONSTRUCTOR_TYPE);
+    shellmin: Shellmin | null;
+    constructor(options: SHELLMINCOMMAND_CONSTRUCTOR_TYPE);
     get label(): string;
     get help(): string;
-    get callback(): CLI_COMMAND_CALLBACK_TYPE;
+    get callback(): SHELLMINCOMMAND_CALLBACK_TYPE;
 }
-export declare class CLI extends EventEmitter {
+export declare class Shellmin extends EventEmitter {
     #private;
     input: any;
     output: any;
@@ -69,7 +69,7 @@ export declare class CLI extends EventEmitter {
     }): Promise<void>;
     live(): void;
     close(): void;
-    registerCommand(command: Command | CLI_COMMAND_CONSTRUCTOR_TYPE): this;
+    registerCommand(command: Command | SHELLMINCOMMAND_CONSTRUCTOR_TYPE): this;
     unregisterCommand(command: Command | string): this;
     getCommand(command: Command | string): Command | null;
     hasCommand(command: Command | string): boolean;
