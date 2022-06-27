@@ -15,6 +15,6 @@
     "@types/node": "^18.0.0"
   },
   "dependencies": {
-    "nodtilus": "^0.0.8"
+    "nodtilus": "^0.0.9"
   }
 }
