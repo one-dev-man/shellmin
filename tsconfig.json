@@ -1,5 +1,5 @@
 {
-  "include": ["./src/**/*", "./src/test/**/*"],
+  "include": ["./src/**/*"],
   "exclude": ["./node_modules", "./**/*.js"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
