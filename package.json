@@ -1,6 +1,6 @@
 {
   "name": "shellmin",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "./dist/shellmin.js",
   "types": "./dist/shellmin.d.ts",
