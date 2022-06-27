@@ -1,8 +1,8 @@
 {
-  "name": "clin",
+  "name": "shellmin",
   "version": "0.0.1",
   "description": "",
-  "main": "./dist/cli.js",
+  "main": "./dist/shellmin.js",
   "scripts": {
     "build": "tsc --build",
     "test": "node test/test"

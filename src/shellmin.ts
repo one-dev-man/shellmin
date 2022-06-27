@@ -11,7 +11,7 @@ const DEFAULT_COMMANDS = {
     exit: {
         label: "exit",
         help: "exit - Exit the program.",
-        callback: async (label: string, args: Array<any>, cli: CLI) => {
+        callback: async (label: string, args: Array<any>, shellmin: Shellmin) => {
             process.exit(0);
             // return true;
         }
@@ -19,11 +19,11 @@ const DEFAULT_COMMANDS = {
     help: {
         label: "help",
         help: "[<command>] - Show commands usage or specific command usage.",
-        callback: async (label: string, args: Array<any>, cli: CLI) => {
+        callback: async (label: string, args: Array<any>, shellmin: Shellmin) => {
             let clog_f = console["__log"] || console.log;
 
             if(args.length < 1) {
-                let cmds = cli.getCommands();
+                let cmds = shellmin.getCommands();
                 clog_f("Commands usage :");
                 for(let i = 0; i < cmds.length; ++i) {
                     let cmd = cmds[i];
@@ -31,8 +31,8 @@ const DEFAULT_COMMANDS = {
                 }
             }
             else {
-                if(cli.hasCommand(args[0])) {
-                    let cmd = cli.getCommand(args[0]) as Command;
+                if(shellmin.hasCommand(args[0])) {
+                    let cmd = shellmin.getCommand(args[0]) as Command;
                     clog_f("Command usage :");
                     clog_f(" - "+cmd.label+" : "+cmd.help);
                 }
@@ -42,20 +42,20 @@ const DEFAULT_COMMANDS = {
     },
     // history: {
     //     label: ".history",
-    //     callback: async (label: string, args: Array<any>, cli: any) => {
+    //     callback: async (label: string, args: Array<any>, shellmin: any) => {
     //         console.log("| Commands history :");
-    //         cli.history.pop();
-    //         for(let i = 0; i < cli.history.length; ++i) {
-    //             console.log("| - "+cli.history[i]);
+    //         shellmin.history.pop();
+    //         for(let i = 0; i < shellmin.history.length; ++i) {
+    //             console.log("| - "+shellmin.history[i]);
     //         }
     //         return true;
     //     }
     // },
     // previous: {
     //     label: ".previous",
-    //     callback: async (label: string, args: Array<any>, cli: any) => {
-    //         cli.history.pop();
-    //         cli.live_stdin_data_callback(Buffer.from(0 < cli.history.length-1 < cli.history.length ? cli.history[cli.history.length-1] : ""));
+    //     callback: async (label: string, args: Array<any>, shellmin: any) => {
+    //         shellmin.history.pop();
+    //         shellmin.live_stdin_data_callback(Buffer.from(0 < shellmin.history.length-1 < shellmin.history.length ? shellmin.history[shellmin.history.length-1] : ""));
     //         return true;
     //     }
     // }
@@ -223,8 +223,8 @@ export class Environment {
 
 //
 
-export type CLI_COMMAND_CALLBACK_TYPE = (label: string, args: Array<any>, cli: CLI | any) => Promise<any>;
-export type CLI_COMMAND_CONSTRUCTOR_TYPE = { label: string, help?: string, callback: CLI_COMMAND_CALLBACK_TYPE };
+export type SHELLMINCOMMAND_CALLBACK_TYPE = (label: string, args: Array<any>, shellmin: Shellmin | any) => Promise<any>;
+export type SHELLMINCOMMAND_CONSTRUCTOR_TYPE = { label: string, help?: string, callback: SHELLMINCOMMAND_CALLBACK_TYPE };
 
 export class Command {
 
@@ -247,11 +247,11 @@ export class Command {
 
     #label: string;
     #help: string;
-    #callback: CLI_COMMAND_CALLBACK_TYPE;
+    #callback: SHELLMINCOMMAND_CALLBACK_TYPE;
 
-    cli: CLI | null = null;
+    shellmin: Shellmin | null = null;
 
-    constructor(options: CLI_COMMAND_CONSTRUCTOR_TYPE) {
+    constructor(options: SHELLMINCOMMAND_CONSTRUCTOR_TYPE) {
         this.#label = options.label;
         this.#help = options.help || "";
         this.#callback = options.callback;
@@ -271,7 +271,7 @@ export class Command {
 
 //
 
-export class CLI extends EventEmitter {
+export class Shellmin extends EventEmitter {
     #env_env: Environment;
     #argv_env: Environment;
 
@@ -508,10 +508,10 @@ export class CLI extends EventEmitter {
 
     //
 
-    registerCommand(command: Command | CLI_COMMAND_CONSTRUCTOR_TYPE) {
+    registerCommand(command: Command | SHELLMINCOMMAND_CONSTRUCTOR_TYPE) {
         let _command = command instanceof Command ? command : new Command(command);
         this.unregisterCommand(_command.label);
-        _command.cli = this;
+        _command.shellmin = this;
         this.#commands.push(_command);
 
         return this;
